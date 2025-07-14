@@ -8,7 +8,7 @@
 </head>
 <body>
   <div class="form-container">
-    <h1>Edit Fruit Recipe: <%= recipe.title %></h1>
+    <h1>Edit Fruit/Veg Recipe: <%= recipe.title %></h1>
 
     <form 
       action="/fruits/<%= recipe.fruit._id %>?_method=PUT" 
@@ -16,7 +16,7 @@
       enctype="multipart/form-data"
     >
       <!-- Fruit Info -->
-      <label>Fruit Name:</label>
+      <label>Fruit/Veg Name:</label>
       <input type="text" name="plantName" value="<%= recipe.fruit.name %>" required />
 
       <label>Scientific Name:</label>
@@ -34,7 +34,7 @@
       <label>Traditional Uses:</label>
       <input type="text" name="traditionalUses" value="<%= recipe.fruit.traditionalUses %>" />
 
-      <label>Upload Fruit Image:</label>
+      <label>Upload Fruit/Veg Image:</label>
       <input type="file" name="plantImage" />
 
       <!-- Recipe Info -->
