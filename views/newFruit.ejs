@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add New Fruit Recipe</title>
+  <link rel="stylesheet" href="/createStyle.css" />
+</head>
+<body>
+  <div class="form-container">
+    <h1>🍒 Add New Fruit Recipe</h1>
+
+    <form action="/fruits/new" method="POST" enctype="multipart/form-data">
+      <!-- Fruit Info -->
+      <h3>🍎 Fruit Information</h3>
+      <input type="text" name="plantName" placeholder="Fruit Name" required><br>
+      <input type="text" name="scientificName" placeholder="Scientific Name" required><br>
+      <input type="text" name="region" placeholder="Region" required><br>
+      <input type="text" name="medicinalValue" placeholder="Medicinal Value" required><br>
+      <input type="text" name="chemicalComposition" placeholder="Chemical Composition" required><br>
+      <input type="text" name="traditionalUses" placeholder="Traditional Uses" required><br>
+      <label>📷 Upload Fruit Image:</label>
+      <input type="file" name="plantImage" accept="image/*" required><br><br>
+
+      <!-- Recipe Info -->
+      <h3>🥣 Recipe Information</h3>
+      <input type="text" name="title" placeholder="Recipe Title" required><br>
+      <label>📸 Upload Dish Image:</label>
+      <input type="file" name="dishImage" accept="image/*" required><br><br>
+
+      <!-- Ingredients -->
+      <h3>🧂 Ingredients</h3>
+      <div id="ingredients">
+        <input type="text" name="ingredientsNames" placeholder="Ingredient Name" required>
+        <input type="file" name="ingredientsImages" accept="image/*" required><br>
+      </div>
+      <button type="button" onclick="addIngredient()">+ Add Ingredient</button><br><br>
+
+      <!-- Steps -->
+      <h3>📋 Steps</h3>
+      <div id="steps">
+        <input type="text" name="steps" placeholder="Step 1" required><br>
+      </div>
+      <button type="button" onclick="addStep()">+ Add Step</button><br><br>
+
+      <!-- Nutrition -->
+      <h3>💡 Nutritional Information</h3>
+      <input type="text" name="calories" placeholder="Calories"><br>
+      <input type="text" name="carbohydrates" placeholder="Carbohydrates"><br>
+      <input type="text" name="protein" placeholder="Protein"><br>
+      <input type="text" name="fats" placeholder="Fats"><br>
+      <input type="text" name="fibre" placeholder="Fibre"><br>
+      <input type="text" name="sugar" placeholder="Sugar"><br>
+      <input type="text" name="iron" placeholder="Iron"><br>
+      <input type="text" name="vitaminA" placeholder="Vitamin A"><br>
+      <input type="text" name="vitaminC" placeholder="Vitamin C"><br><br>
+
+      <button type="submit">✅ Add Fruit Recipe</button>
+    </form>
+  </div>
+
+  <!-- JS to add more ingredients/steps -->
+  <script>
+    function addIngredient() {
+      const container = document.getElementById('ingredients');
+      container.insertAdjacentHTML('beforeend',
+        `<input type="text" name="ingredientsNames" placeholder="Ingredient Name" required>
+         <input type="file" name="ingredientsImages" accept="image/*" required><br>`
+      );
+    }
+
+    function addStep() {
+      const container = document.getElementById('steps');
+      const count = container.querySelectorAll('input').length + 1;
+      container.insertAdjacentHTML('beforeend',
+        `<input type="text" name="steps" placeholder="Step ${count}" required><br>`
+      );
+    }
+  </script>
+</body>
+</html>

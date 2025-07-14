@@ -1,0 +1,359 @@
+
+* {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Quicksand', sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    body {
+      background: url('images/bgPlant2.jpg') no-repeat center center fixed;
+      background-size: cover;
+      backdrop-filter: blur(10px);
+      color: #333;
+    }
+
+
+    /* //1st dangor container */
+    .top-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  gap: 1em;
+  margin-top: 2%;
+}
+
+.recipe-image-container {
+  width: 100%;
+  position: relative;
+}
+
+.recipe-image {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.hamburger {
+  background: #4caf5080;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background 0.3s ease;
+      /* z-index: 2; */
+     position: absolute;
+     top: 10px;
+     right: 10px;
+     padding: 5px 10px;
+     font-size: 24px;
+     cursor: pointer;
+     display: block;
+     border: none;
+}
+
+/* Hidden section on mobile */
+.plant-info {
+  background: #ffffffcc;
+  border-radius: 10px;
+  padding: 1em;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+}
+
+#plantInfo h3{
+  color: #2e7d32;
+}
+/* Initially hidden below 700px */
+.hidden-on-mobile {
+  display: none;
+}
+
+/* Shown only on small screen toggle */
+.plant-info.show {
+  display: block;
+  margin-top: 1em;
+}
+
+/* For wider screens (≥700px) */
+@media (min-width: 700px) {
+  .top-container {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .recipe-image-container {
+    width: 75%;
+  }
+
+  .plant-info {
+    display: block;
+    width: 25%;
+    margin-top: 0;
+  }
+
+  .hamburger {
+    display: none; /* Hide hamburger */
+  }
+}
+
+
+
+    .top-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    }
+    .container {
+      padding: 1em;
+      min-height: 100vh;
+    }
+
+    .recipe-image-container {
+      position: relative;
+      width: 100%;
+       height: auto;
+      max-height: 75vh;
+      overflow: hidden;
+      border-radius: 1em;
+      margin-bottom: 1.5em;
+      width: 100%;
+     display: block;
+     object-fit: contain;
+    }
+
+    .recipe-image {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+       width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+    }
+
+    .back-btn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 0.5em 1em;
+      background: #4caf5080;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background 0.3s ease;
+      z-index: 2;
+    }
+    .back-btn:hover {
+      background: #388e3c;
+    }
+
+    .ingredients {
+      margin-bottom: 2em;
+      padding-left: 10px;
+    }
+    .ingredients h2 {
+      margin-bottom: 0.5em;
+      color: #2e7d32;
+    }
+    .ingredient-list {
+      list-style: none;
+      display: flex;
+      overflow-x: auto;
+      gap: 1em;
+      padding-bottom: 1em;
+      height: auto;
+      width: auto;
+    }
+    .ingredient-list li img{
+        width: 60%;
+        height: 75%;
+    }
+    .ingredient-list li {
+      max-width: 200px;
+      background: #ffffffcc;
+      padding: 0.5em;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+    .ingredient-list li:hover {
+      transform: scale(1.05);
+    }
+    .ingredient-list img {
+      width: 60%;
+      height: auto;
+      border-radius: 50%;
+      margin-bottom: 0.5em;
+    }
+
+    .steps {
+      margin-bottom: 2em;
+      padding-left: 10px;
+    }
+    .steps h2 {
+      margin-bottom: 0.5em;
+      color: #2e7d32;
+    }
+    .steps ol {
+      padding-left: 1em;
+      line-height: 1.6;
+    }
+
+    /* .nutrition-section {
+      margin-bottom: 2em;
+      padding-left: 10px;
+    }
+    .nutrition-section h2 {
+      margin-bottom: 0.5em;
+      color: #2e7d32;
+    }
+    .nutrition-dropdown {
+      width: 100%;
+      padding: 0.75em;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      background: linear-gradient(120deg, #e8f5e9, #ffffff);
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    .nutrition-dropdown:hover {
+      background: linear-gradient(120deg, #c8e6c9, #ffffff); */
+    /* } */
+
+    .custom-dropdown {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+}
+
+.custom-dropdown {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.nutrition-section {
+  width: 100%;
+  padding: 0 1em;
+}
+
+.dropdown-toggle {
+  width: 100% !important; 
+  box-sizing: border-box; 
+  display: block;
+  padding: 1em;
+  font-size: 1.1em;
+  font-weight: bold;
+  background: linear-gradient(120deg, #e8f5e9, #ffffff);
+  border: 2px solid #81c784;
+  border-radius: 12px;
+  color: #2e7d32;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  margin: 1em 0;
+}
+
+
+.dropdown-toggle:hover {
+  background: linear-gradient(120deg, #c8e6c9, #ffffff);
+  color: #1b5e20;
+}
+
+
+.nutrition{
+      color: #2e7d32;
+      margin-bottom: 0.5em;
+
+}
+
+.dropdown-menu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+  background: #ffffffcc;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  margin-top: 0.5em;
+}
+
+.dropdown-menu.open {
+  max-height: 300px; /* adjust based on content */
+}
+
+.dropdown-item {
+  padding: 0.75em 1em;
+  border-bottom: 1px solid #ddd;
+  color: #333;
+  pointer-events: none; /* 🔒 makes them unclickable */
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+
+ footer{
+  background-color: #aebcae80;
+  text-align: center;
+  height: 30%;
+  color: black;
+  justify-content: center;
+  margin-top: 20%;
+  padding-top: 5%;
+ }
+
+    @media (max-width: 600px) {
+      .ingredient-list {
+        gap: 0.75em;
+      }
+    }
+
+   @media (min-width: 700px) {
+  .top-container {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch; /* 🔥 Important: stretch children to same height */
+    gap: 1em;
+  }
+
+  .recipe-image-container {
+    width: 75%;
+    height: auto;
+    max-height: 75vh;
+    display: flex;
+    align-items: stretch;
+    border-radius: 30px;
+  }
+
+  .recipe-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 30px;
+  }
+
+  .plant-info {
+    width: 25%;
+    max-height: 75vh;
+    overflow-y: auto;  
+    background: #ffffffcc;
+    padding: 1em;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  }
+
+  .hamburger {
+    display: none; 
+  }
+}

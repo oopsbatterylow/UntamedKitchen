@@ -1,0 +1,141 @@
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Quicksand', sans-serif;
+  background-color: #f4f9f4;
+  color: #333;
+}
+
+.collab-header {
+  background: linear-gradient(to right, #d9fdd9, #c9ebc9);
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.collab-header h1 {
+  font-family: 'Raleway', sans-serif;
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.collab-header p {
+  font-size: 16px;
+  color: #444;
+}
+
+.collab-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+/* Partner block */
+.partner-block {
+  background: #ffffff;
+  border-left: 5px solid #88c488;
+  padding: 24px;
+  margin-bottom: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease;
+}
+
+.partner-block h2 {
+  font-family: 'Raleway', sans-serif;
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #2e7d32;
+}
+
+.partner-block p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #444;
+}
+
+.collab-link {
+  display: inline-block;
+  margin-top: 14px;
+  text-decoration: none;
+  color: #1d6f1d;
+  font-weight: 600;
+  font-size: 14px;
+  border-bottom: 1px solid transparent;
+  transition: border 0.3s ease;
+}
+
+.collab-link:hover {
+  border-bottom: 1px solid #1d6f1d;
+}
+
+/* Footer */
+.minimal-footer {
+  text-align: center;
+  padding: 30px 15px;
+  background: #e5f5e0;
+  font-size: 14px;
+  color: #555;
+}
+
+.footer-subtext {
+  font-size: 13px;
+  color: #444;
+}
+
+
+@media screen and (max-width: 768px) {
+  .collab-header h1 {
+    font-size: 24px;
+  }
+
+  .collab-header p {
+    font-size: 14px;
+  }
+
+  .partner-block {
+    padding: 18px;
+  }
+
+  .partner-block h2 {
+    font-size: 20px;
+  }
+
+  .partner-block p {
+    font-size: 14px;
+  }
+
+  .collab-link {
+    font-size: 13px;
+  }
+
+  .collab-container {
+    padding: 20px 12px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .collab-header {
+    padding: 30px 10px;
+  }
+
+  .collab-container {
+    padding: 16px 10px;
+  }
+
+  .partner-block {
+    padding: 16px;
+  }
+
+  .partner-block h2 {
+    font-size: 18px;
+  }
+
+  .partner-block p {
+    font-size: 13px;
+  }
+
+  .collab-link {
+    font-size: 12.5px;
+  }
+}

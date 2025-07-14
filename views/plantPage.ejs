@@ -1,0 +1,89 @@
+<!-- eikhn page a di jikhnn plant r page ase heikhn render hoi  -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore Uncultivated Plants</title>
+  <link rel="stylesheet" href="/stylePlant.css">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet">
+</head>
+<body class="bg1">
+  <header class="page-header">
+    <h1>Untamed Kitchen</h1>
+    <p class="tagline">Rediscover nature's wild flavors – one plant at a time!</p>
+  </header>
+
+  <div class="gallery">
+    <ul class="plant-list">
+      <% plants.forEach(plant => { %>
+        <li class="plant-item">
+          <img src="<%= plant.image %>" alt="<%= plant.name %>" onclick="location.href='/recipes/<%= plant._id %>';">
+          <span><%= plant.name %></span>
+
+          <div class="card-actions">
+            <!-- Edit Button -->
+            <form method="GET" action="/plants/<%= plant._id %>/edit" onsubmit="return confirmPassword();">
+              <button type="submit" class="edit-btn">Edit</button>
+            </form>
+
+            <!-- Delete Button -->
+            <form method="POST" action="/plants/<%= plant._id %>/delete" onsubmit="return confirmPassword();">
+              <button type="submit" class="delete-btn">Delete</button>
+            </form>
+          </div>
+        </li>
+      <% }); %>
+    </ul>
+
+    <a href="/createForm" class="create-btn">➕ Add New Plant + Recipe</a>
+
+    <div class="redirect-button">
+      <a href="/fruits" class="page-btn">🍉 Go to Fruit Recipes →</a>
+      <br><br>
+    </div>
+  </div>
+
+  <footer class="minimal-footer">
+  <p class="footer-title"><p class="footer-copy">© 2025 Untamed Kitchen. All rights reserved.</p>
+</p>
+  <p class="footer-subtext">An initiative led by students to preserve nature’s hidden flavors.</p>
+  <br><br>
+
+  <nav class="secondary">
+    <a href="/about">About us </a>
+    <a href="/contact">Contact us </a>
+    <a href="/collaboration">Collaborations</a>
+  </nav>
+
+  <br><br>
+
+  <nav class="footer-nav">
+    <a href="/">Home</a>
+    <a href="/plants">Plants</a>
+    <a href="/fruits">Fruits</a>
+  </nav>
+  <br><br>
+
+  
+</footer>
+
+
+
+
+  <script>
+    const PASSWORD = "untamed123"; // Change this if needed
+
+    function confirmPassword() {
+      const userInput = prompt("🔒 Enter the admin password to continue:");
+      if (userInput === PASSWORD) {
+        return true;
+      } else {
+        alert("❌ Incorrect password! Access denied.");
+        return false;
+      }
+    }
+  </script>
+</body>
+</html>

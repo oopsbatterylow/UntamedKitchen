@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Healthy bites for happy kids</title>
+  <link rel="stylesheet" href="/homeStyle.css" />
+</head>
+<body>
+  <div class="background"></div>
+
+  <div class="content">
+    <h1 class="project-title">Healthy bites for happy kids</h1>
+
+    <div class="circle">
+      <img id="circleImage" src="/images/circleImg.jpg" alt="Uncultivated Plants" />
+    </div>
+
+    <p class="quote">
+      Don’t like uncultivated plants? Click here — you may fall in love with some of them!
+    </p>
+
+    <a href="/plants" class="explore-btn">Explore Recipes</a>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+  const imageElement = document.getElementById('circleImage');
+
+  const images = [
+    '/images/circleImg.jpg',
+    '/images/circleImg2.jpg',
+    '/images/circleImg3.jpg',
+    '/images/circleImg4.jpg',
+    '/images/circleImg5.jpg'
+  ];
+  
+
+  let currentIndex = 0;
+
+  function fadeToNextImage() {
+    imageElement.classList.add('fade-out');
+    setTimeout(() => {
+      currentIndex = (currentIndex + 1) % images.length;
+      imageElement.src = images[currentIndex];
+      imageElement.classList.remove('fade-out');
+    }, 300);
+  }
+
+  setInterval(fadeToNextImage, 300);
+});
+
+  </script>
+</body>
+</html>

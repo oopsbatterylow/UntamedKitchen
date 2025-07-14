@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+
+
+  <title>Meet the Team / </title>
+  <link rel="stylesheet" href="/aboutStyle.css" />
+</head>
+<body>
+
+  <!-- Background -->
+  <div class="background-blur"></div>
+
+  <!-- Mobile hamburger -->
+  <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+
+  <div class="overlay-container">
+    
+    <!-- Sidebar Menu -->
+    <nav class="sidebar" id="sidebar">
+      <ul>
+        
+        <li onclick="showMember('rajlaxmi')">Rajlaxmi Rajkonwari</li>
+        <li onclick="showMember('bijayananda')">Bijayananda Bora</li>
+        <li onclick="showMember('shruti')">Shruti Pritom Baruah</li>
+        <li onclick="showMember('nishita')">Nishita Bora</li>
+        <li onclick="showMember('anushka')">Anushka Singh Boraik</li>
+        <li onclick="showMember('priya')">Priya Sarkar</li>
+        <li onclick="showMember('ayushman')">Ayushman Bharadwaj</li>
+       
+      </ul>
+    </nav>
+
+    <!-- Content Section -->
+    <main id="member-detail" class="detail-section">
+      <h2>Meet the Team</h2>
+      <p class="contactP">Select a team member to know more about them.</p>
+
+      <br><br>
+      <div class="mission-highlight">
+  <p>We, the students of <strong>Untamed Kitchen</strong>, are on a mission to preserve the forgotten flavors of our roots while blending them with a modern twist. Our goal is to revive traditional recipes that have faded from everyday kitchens and make them accessible, exciting, and relevant for today’s generation.</p>
+  <p>If you know of such unique, local, or ancestral recipes that deserve a spotlight, we’d love to hear from you! Your contribution means a lot to us, and with your permission, we’d be proud to feature it on our website. Check out the contact information provided—your support helps keep these culinary legacies alive.</p>
+</div>
+
+    </main>
+  </div>
+
+  <script src="aboutUs.js"></script>
+</body>
+</html>

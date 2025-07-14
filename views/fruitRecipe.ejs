@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>recipe/<%= recipe.fruit?.name?.toLowerCase() || "unknown" %></title>
+  <link rel="stylesheet" href="/styleRecipe.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    .dropdown-menu {
+      display: none;
+    }
+    .dropdown-menu.show {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-container">
+    <div class="recipe-image-container">
+      <a href="/fruits" class="back-btn">← Back</a>
+      <img src="<%= recipe.image %>" alt="Recipe Dish" class="recipe-image" />
+      <button class="hamburger">&#9776;</button>
+    </div>
+
+    <section class="plant-info hidden-on-mobile" id="plantInfo">
+      <h3>Recipe Name:</h3>
+      <p><%= recipe.title %></p>
+
+      <h3>Fruit Details</h3>
+      <p><strong>Scientific Name:</strong> <%= recipe.fruit?.scientificName || "Not available" %></p>
+      <p><strong>Region:</strong> <%= recipe.fruit?.region || "Not available" %></p>
+      <p><strong>Medicinal Value:</strong> <%= recipe.fruit?.medicinalValue || "Not available" %></p>
+      <p><strong>Chemical Composition:</strong> <%= recipe.fruit?.chemicalComposition || "Not available" %></p>
+      <p><strong>Traditional Uses:</strong> <%= recipe.fruit?.traditionalUses || "Not available" %></p>
+    </section>
+  </div>
+
+  <section class="ingredients">
+    <h2>Ingredients</h2>
+    <ul class="ingredient-list">
+      <% recipe.ingredients.forEach(item => { %>
+        <li>
+          <img src="<%= item.image || '/default-ingredient.png' %>" alt="<%= item.name || 'Ingredient' %>" /><br>
+          <%= item.name %>
+        </li>
+      <% }) %>
+    </ul>
+  </section>
+
+  <section class="steps">
+    <h2>Steps</h2>
+    <ol>
+      <% recipe.steps.forEach(step => { %>
+        <li><%= step %></li>
+      <% }) %>
+    </ol>
+  </section>
+
+  <section class="nutrition-section">
+    <div class="custom-dropdown">
+      <button class="dropdown-toggle">View Nutrition Info ⌄</button>
+      <div class="dropdown-menu">
+        <% if (recipe.nutrition) { %>
+          <% if (recipe.nutrition.calories) { %><div class="dropdown-item">Calories: <%= recipe.nutrition.calories %></div><% } %>
+          <% if (recipe.nutrition.carbohydrates) { %><div class="dropdown-item">Carbohydrates: <%= recipe.nutrition.carbohydrates %></div><% } %>
+          <% if (recipe.nutrition.protein) { %><div class="dropdown-item">Protein: <%= recipe.nutrition.protein %></div><% } %>
+          <% if (recipe.nutrition.fats) { %><div class="dropdown-item">Fats: <%= recipe.nutrition.fats %></div><% } %>
+          <% if (recipe.nutrition.fibre) { %><div class="dropdown-item">Fibre: <%= recipe.nutrition.fibre %></div><% } %>
+          <% if (recipe.nutrition.sugar) { %><div class="dropdown-item">Sugar: <%= recipe.nutrition.sugar %></div><% } %>
+          <% if (recipe.nutrition.iron) { %><div class="dropdown-item">Iron: <%= recipe.nutrition.iron %></div><% } %>
+          <% if (recipe.nutrition.vitaminA) { %><div class="dropdown-item">Vitamin A: <%= recipe.nutrition.vitaminA %></div><% } %>
+          <% if (recipe.nutrition.vitaminC) { %><div class="dropdown-item">Vitamin C: <%= recipe.nutrition.vitaminC %></div><% } %>
+        <% } else { %>
+          <div class="dropdown-item">No nutrition info available.</div>
+        <% } %>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const toggle = document.querySelector('.dropdown-toggle');
+      const menu = document.querySelector('.dropdown-menu');
+      if (toggle && menu) {
+        toggle.addEventListener('click', function () {
+          menu.classList.toggle('show');
+        });
+      }
+    });
+  </script>
+  <script src="/script.js"></script>
+</body>
+</html>

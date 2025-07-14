@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit <%= recipe.fruit.name %></title>
+  <link rel="stylesheet" href="/createStyle.css" />
+</head>
+<body>
+  <div class="form-container">
+    <h1>Edit Fruit Recipe: <%= recipe.title %></h1>
+
+    <form 
+      action="/fruits/<%= recipe.fruit._id %>?_method=PUT" 
+      method="POST" 
+      enctype="multipart/form-data"
+    >
+      <!-- Fruit Info -->
+      <label>Fruit Name:</label>
+      <input type="text" name="plantName" value="<%= recipe.fruit.name %>" required />
+
+      <label>Scientific Name:</label>
+      <input type="text" name="scientificName" value="<%= recipe.fruit.scientificName %>" />
+
+      <label>Region:</label>
+      <input type="text" name="region" value="<%= recipe.fruit.region %>" />
+
+      <label>Medicinal Value:</label>
+      <input type="text" name="medicinalValue" value="<%= recipe.fruit.medicinalValue %>" />
+
+      <label>Chemical Composition:</label>
+      <input type="text" name="chemicalComposition" value="<%= recipe.fruit.chemicalComposition %>" />
+
+      <label>Traditional Uses:</label>
+      <input type="text" name="traditionalUses" value="<%= recipe.fruit.traditionalUses %>" />
+
+      <label>Upload Fruit Image:</label>
+      <input type="file" name="plantImage" />
+
+      <!-- Recipe Info -->
+      <label>Recipe Title:</label>
+      <input type="text" name="title" value="<%= recipe.title %>" required />
+
+      <label>Upload Dish Image:</label>
+      <input type="file" name="dishImage" />
+
+      <!-- Ingredients -->
+      <h3>Ingredients</h3>
+      <% recipe.ingredients.forEach((ingredient, i) => { %>
+        <div class="ingredient-block">
+          <label>Ingredient <%= i + 1 %> Name:</label>
+          <input type="text" name="ingredientsNames" value="<%= ingredient.name %>" />
+          <label>Ingredient Image:</label>
+          <input type="file" name="ingredientsImages" />
+        </div>
+      <% }) %>
+
+      <!-- Steps -->
+      <h3>Steps</h3>
+      <% recipe.steps.forEach((step, i) => { %>
+        <label>Step <%= i + 1 %>:</label>
+        <input type="text" name="steps" value="<%= step %>" />
+      <% }) %>
+
+      <!-- Nutrition -->
+      <h3>Nutritional Information</h3>
+      <label>Calories:</label>
+      <input type="text" name="calories" value="<%= recipe.nutrition.calories %>" />
+
+      <label>Carbohydrates:</label>
+      <input type="text" name="carbohydrates" value="<%= recipe.nutrition.carbohydrates %>" />
+
+      <label>Protein:</label>
+      <input type="text" name="protein" value="<%= recipe.nutrition.protein %>" />
+
+      <label>Fats:</label>
+      <input type="text" name="fats" value="<%= recipe.nutrition.fats %>" />
+
+      <label>Fibre:</label>
+      <input type="text" name="fibre" value="<%= recipe.nutrition.fibre %>" />
+
+      <label>Sugar:</label>
+      <input type="text" name="sugar" value="<%= recipe.nutrition.sugar %>" />
+
+      <label>Iron:</label>
+      <input type="text" name="iron" value="<%= recipe.nutrition.iron %>" />
+
+      <label>Vitamin A:</label>
+      <input type="text" name="vitaminA" value="<%= recipe.nutrition.vitaminA %>" />
+
+      <label>Vitamin C:</label>
+      <input type="text" name="vitaminC" value="<%= recipe.nutrition.vitaminC %>" />
+
+      <!-- ✅ Final Submit Button -->
+      <div style="text-align: center; margin-top: 20px;">
+        <button type="submit" class="submit-btn">Update Fruit Recipe</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

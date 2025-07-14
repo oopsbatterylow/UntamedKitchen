@@ -1,0 +1,190 @@
+/* mur fruit r main page tur stylesheet okay ?? */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+body.bg-fruit {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: rgba(128, 137, 128, 0.9);
+  opacity: 0.8;
+  color: #2e2e2e;
+  min-height: 100vh;
+}
+
+.page-header {
+  text-align: center;
+  padding: 4% 2%;
+  background: rgba(205, 205, 205, 0.55);
+};
+
+.page-header h1 {
+  font-size: 250%;
+  margin-bottom: 1%;
+  font-family: 'Raleway', sans-serif;
+}
+
+.page-header .tagline {
+  font-size: 130%;
+  color: #1a1919;
+  font-style: italic;
+}
+
+.gallery {
+  width: 100%;
+  background: 	rgba(205, 205, 205, 0.55);
+  padding: 3% 2%;
+  overflow-x: auto;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.plant-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2%;
+  list-style: none;
+}
+
+.plant-item {
+  width: 22%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(198, 199, 182, 0.85);
+  padding: 4%;
+  margin-bottom: 5%;
+  border-radius: 12px;
+  transition: transform 0.3s ease, background 0.3s ease;
+  cursor: pointer;
+  min-width: 150px;
+  max-width: 270px;
+  text-align: center;
+  backdrop-filter: blur(3px);
+}
+
+.plant-item img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  margin-bottom: 10%;
+  box-shadow: 0 0 10px rgba(195, 220, 208, 0.3);
+  background: no-repeat center center/cover;
+}
+
+.plant-item span {
+  font-size: 110%;
+  font-weight: bold;
+  transition: transform 0.3s ease, font-size 0.3s ease;
+  color: #2e2e2e;
+}
+
+.plant-item:hover {
+  transform: translateY(-3%) scale(1);
+  background-color: rgba(154, 155, 142, 0.85);
+}
+
+.plant-item:hover span {
+  font-size: 120%;
+  transform: translateX(5%);
+  color: #586f7c;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 10px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.btn-edit {
+  background-color: transparent;
+  color: #586f7c;
+  font-size: 0.8rem;
+  border: 1px solid #586f7c;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Quicksand', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.btn-edit:hover {
+  background-color: #c3dcd0;
+  color: #2e2e2e;
+}
+
+.btn-delete {
+  background-color: #586f7c;
+  color: white;
+  font-size: 0.8rem;
+  padding: 4px 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Quicksand', sans-serif;
+  transition: background-color 0.3s ease;
+}
+
+.btn-delete:hover {
+  background-color: #3f4d56;
+}
+
+.redirect-button a {
+  display: inline-block;
+  background-color: #d6ccc2;
+  color: #2e2e2e;
+  padding: 1% 3%;
+  font-size: 110%;
+  border-radius: 10px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  text-decoration: none;
+  margin-top: 1rem;
+}
+
+.redirect-button a:hover {
+  background-color: #c3dcd0;
+  transform: scale(1.05);
+}
+
+footer {
+  background-color: rgba(181, 181, 179, 0.85);
+  color: #2e2e2e;
+  text-align: center;
+  padding: 4% 6%;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
+}
+
+footer ul {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+footer ul li {
+  margin: 4px 0;
+}
+
+@media (max-width: 768px) {
+  .plant-item {
+    width: 40%;
+  }
+
+  .page-header h1 {
+    font-size: 180%;
+  }
+
+  .page-header .tagline {
+    font-size: 110%;
+  }
+}

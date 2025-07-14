@@ -1,0 +1,108 @@
+<!-- eikhn page r pora fruit r main page tu render hoi  (err ahi ase heibilak ignore, odorkari err) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title><%= type === "plant" ? "Explore Uncultivated Plants" : "Explore Wild Fruits" %></title>
+  <link rel="stylesheet" href="/styleFruit.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet" />
+</head>
+<body class="bg1">
+
+  <!-- Header -->
+  <header class="page-header">
+    <h1>Untamed Kitchen</h1>
+    <p class="tagline">Rediscover nature's wild flavors – one <%= type %> at a time!</p>
+  </header>
+
+  <!-- Gallery Section -->
+  <div class="gallery">
+    <ul class="plant-list">
+      <% items.forEach(item => { %>
+        <li class="plant-item">
+          <div onclick="location.href='/<%= type === 'plant' ? 'recipes' : 'fruit-recipes' %>/<%= item._id %>';">
+            <img src="<%= item.image %>" alt="<%= item.name %>" />
+            <span><%= item.name %></span>
+          </div>
+
+          <!-- Edit/Delete Buttons -->
+          <div class="card-actions">
+            <!-- Edit -->
+            <form action="/<%= type === 'plant' ? 'plants' : 'fruits' %>/<%= item._id %>/edit" method="GET" onsubmit="return confirmPassword();">
+              <button type="submit" class="btn-edit">Edit</button>
+            </form>
+
+            <!-- Delete -->
+            <form action="/<%= type === 'plant' ? 'plants' : 'fruits' %>/<%= item._id %>/delete" method="POST" onsubmit="return confirmPassword();">
+              <button type="submit" class="btn-delete">Delete</button>
+            </form>
+          </div>
+        </li>
+      <% }) %>
+    </ul>
+
+    <!-- Add New Button -->
+    <% if (type === "fruit") { %>
+      <div class="redirect-button">
+        <a href="/fruits/new" class="btn-add"> Add New Fruit</a>
+      </div>
+    <% } else { %>
+      <div class="redirect-button">
+        <a href="/createForm" class="btn-add"> Add New Plant</a>
+      </div>
+    <% } %>
+
+    <!-- Navigation -->
+    <div class="redirect-button">
+      <% if (type === "plant") { %>
+        <a href="/fruits"> Click here for Fruits</a>
+      <% } else { %>
+        <a href="/plants"> Back to Plants</a>
+      <% } %>
+      <br><br><br>
+    </div>
+  </div>
+  
+
+  <!-- Footer -->
+    <footer class="minimal-footer">
+  <p class="footer-title"><p class="footer-copy">© 2025 Untamed Kitchen. All rights reserved.</p>
+</p>
+  <p class="footer-subtext">An initiative led by students to preserve nature’s hidden flavors.</p>
+  <br><br>
+
+  <nav class="secondary">
+    <a href="/about">About us   </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="/contact">Contact us </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="/collaboration">Collaborations</a>
+  </nav>
+
+  <br><br>
+
+  <nav class="footer-nav">
+    <a href="/">Home</a>
+    <a href="/plants">Plants</a>
+    <a href="/fruits">Fruits</a>
+  </nav>
+  <br><br>
+
+  
+</footer>
+
+  <!-- Password Confirmation -->
+  <script>
+    const PASSWORD = "untamed123";
+    function confirmPassword() {
+      const input = prompt("🔒 Enter the admin password to continue:");
+      if (input === PASSWORD) {
+        return true;
+      } else {
+        alert("❌ Incorrect password! Access denied.");
+        return false;
+      }
+    }
+  </script>
+</body>
+</html>
