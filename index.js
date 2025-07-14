@@ -4,7 +4,7 @@ const path = require("path");
 const multer = require("multer");
 const app = express();
 const methodOverride = require("method-override");
-
+require('dotenv').config();
 
 // Models
 const Plant = require("./models/plant");
@@ -15,7 +15,7 @@ const RecipeFruit = require("./models/recipeFruit");
 
 // App setup
 const port = 3000;
-const MONGO_URL = "mongodb://127.0.0.1:27017/RECIPE";
+const MONGO_URL = process.env.MONGODB_URL;
 
 
 // Middleware
