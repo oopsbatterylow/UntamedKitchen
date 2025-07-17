@@ -44,13 +44,13 @@ function showMember(memberId) {
       shruti: {
       name: "Shruit Pritom Baruah",
       role: "Illustrator and storyteller",
-      image: "/images/team/bijayananda.jpg",
+      image: "/images/shruit.jpg.",
       bg: "/images/bg/bijayananda-bg.jpg",
       work: "Illustrator andstoryteller; added visuals and cultural context.",
       about: "A pol science major student of 5th sem  studing in Jagannath Barooah University (as per as july 2025).",
       contact: {
-        phone: " janu ai bru phir bhi di dibi aru pto dibi fool",
-        email: "koi dibi"
+        phone: "9864326821",
+        email: "boruahshruti30@gmail.com"
       }
     },
       nishita: {
