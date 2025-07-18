@@ -49,8 +49,8 @@ function showMember(memberId) {
       work: "Illustrator andstoryteller; added visuals and cultural context.",
       about: "A pol science major student of 5th sem  studing in Jagannath Barooah University (as per as july 2025).",
       contact: {
-        phone: "9864326821",
-        email: "boruahshruti30@gmail.com"
+        phone: "9394574800",
+        email: "shrutiboruah270@gmail.com"
       }
     },
       nishita: {
