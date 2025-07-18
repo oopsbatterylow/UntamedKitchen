@@ -14,7 +14,7 @@ function showMember(memberId) {
   const data = {
      rajlaxmi: {
       name: "Rajlaxmi Rajkonwari",
-      role: "Webiste designer and developer",
+      role: "Website designer and developer",
       image: "/images/rajlaxmi.jpg",
       bg: "public\images\rajlaxmi.jpg",
       work: " Editorial Head, ensured nutritional and scientific accuracy.",
@@ -80,13 +80,13 @@ function showMember(memberId) {
       priya: {
       name: "Priya Sarkar",
       role: "Data compiler",
-      image: "/images/team/bijayananda.jpg",
+      image: "/images/priya.jpg",
       bg: "/images/bg/bijayananda-bg.jpg",
       work: "Data compiler; worked on nutritional charts and food suitability.",
       about: "A pol science major student of 5th sem  studing in Jagannath Barooah University (as per as july 2025).",
       contact: {
-        phone: " di dibiiiiiii aru pto dibi hunkale",
-        email: "koi dibi"
+        phone: "9395364778",
+        email: "priyasarkar93953@gmail.com"
       }
     },
       ayushman: {
