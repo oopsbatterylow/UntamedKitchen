@@ -68,13 +68,13 @@ function showMember(memberId) {
       anushka: {
       name: "Anushka Singh Boraik",
       role: "Creative lead",
-      image: "/images/team/bijayananda.jpg",
+      image: "/images/anushka.jpg",
       bg: "/images/bg/bijayananda-bg.jpg",
       work: "Creative lead; worked on visual design and child-friendly recipe formats.",
       about: "A pol science major student of 5th sem  studing in Jagannath Barooah University (as per as july 2025).",
       contact: {
-        phone: " grp t koi diba aru aru pto u di diba",
-        email: "koi diba"
+        phone: "9395366363",
+        email: "not defined"
       }
     },
       priya: {
