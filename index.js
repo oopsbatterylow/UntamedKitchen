@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
+const fs = require("fs");
 const multer = require("multer");
 const app = express();
 const methodOverride = require("method-override");
@@ -12,11 +13,21 @@ const Recipe = require("./models/recipe");
 const Fruit = require("./models/fruit");
 const RecipeFruit = require("./models/recipeFruit");
 
+const {uploadToCloudinary, deleteFromCloudinary} = require('./utils/cloudinary')
+
+// Helper function to extract public_id from Cloudinary URL
+const getPublicIdFromUrl = (url) => {
+  if (!url) return null;
+  const parts = url.split('/');
+  const lastPart = parts[parts.length - 1];
+  const publicId = lastPart.split('.')[0];
+  const folder = parts[parts.length - 2];
+  return `${folder}/${publicId}`;
+};
 
 // App setup
 const port = 3000;
 const MONGO_URL = process.env.MONGODB_URL;
-
 
 // Middleware
 app.use(express.static(path.join(__dirname, "public")));
@@ -24,8 +35,6 @@ app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(methodOverride("_method"));
-
-
 
 // MongoDB connection
 mongoose.connect(MONGO_URL)
@@ -45,26 +54,20 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-
-
 /* ---------------- ROUTES ---------------- */
 
 app.get("/", (req, res) => {
   res.redirect("/cover");
 });
 
-
 app.get("/cover", (req, res) => {
   res.render("coverPage");
 });
-
 
 // Root redirect
 app.get("/", (req, res) => {
   res.redirect("/plants");
 });
-
-
 
 //-------------plants-----------------------
 // Show all plants
@@ -76,7 +79,6 @@ app.get("/plants", async (req, res) => {
     res.status(500).send("Error loading plants.");
   }
 });
-
 
 // Show specific recipe
 app.get("/recipes/:id", async (req, res) => {
@@ -111,9 +113,7 @@ app.get("/plants/:id/edit", async (req, res) => {
   }
 });
 
-
-
-// Handle form submission
+// route to edit a plant
 app.post(
   "/edit/:id",
   upload.fields([
@@ -162,8 +162,21 @@ app.post(
       recipe.plant.chemicalComposition = chemicalComposition;
       recipe.plant.traditionalUses = traditionalUses;
 
+      // Handle plant image update
       if (req.files["plantImage"]) {
-        recipe.plant.image = "/uploads/" + req.files["plantImage"][0].filename;
+        // Delete old image from Cloudinary if it exists
+        if (recipe.plant.image) {
+          const publicId = getPublicIdFromUrl(recipe.plant.image);
+          if (publicId) {
+            await deleteFromCloudinary("plants", publicId.split('/')[1]);
+          }
+        }
+        
+        // Upload new image
+        const filePath = req.files["plantImage"][0].path;
+        const plantImageUrl = await uploadToCloudinary(filePath, "plants", "plant-" + Date.now());
+        recipe.plant.image = plantImageUrl;
+        fs.unlinkSync(filePath);
       }
 
       await recipe.plant.save();
@@ -171,8 +184,21 @@ app.post(
       // Update recipe fields
       recipe.title = title;
 
+      // Handle dish image update
       if (req.files["dishImage"]) {
-        recipe.image = "/uploads/" + req.files["dishImage"][0].filename;
+        // Delete old image from Cloudinary if it exists
+        if (recipe.image) {
+          const publicId = getPublicIdFromUrl(recipe.image);
+          if (publicId) {
+            await deleteFromCloudinary("recipes", publicId.split('/')[1]);
+          }
+        }
+        
+        // Upload new image
+        const filePath = req.files["dishImage"][0].path;
+        const dishImageUrl = await uploadToCloudinary(filePath, "recipes", "dish-" + Date.now());
+        recipe.image = dishImageUrl;
+        fs.unlinkSync(filePath);
       }
 
       const ingredientNames = Array.isArray(ingredientsNames)
@@ -181,13 +207,31 @@ app.post(
 
       const ingredientImages = req.files["ingredientsImages"] || [];
 
-      recipe.ingredients = ingredientNames.map((name, i) => ({
-        name,
-        image: ingredientImages[i]
-          ? "/uploads/" + ingredientImages[i].filename
-          : recipe.ingredients[i]?.image || "" 
-      }));
+      // Handle ingredients with image updates
+      const updatedIngredients = await Promise.all(
+        ingredientNames.map(async (name, i) => {
+          let imageUrl = recipe.ingredients[i]?.image || "";
+          
+          if (ingredientImages[i]) {
+            // Delete old ingredient image if it exists
+            if (recipe.ingredients[i]?.image) {
+              const publicId = getPublicIdFromUrl(recipe.ingredients[i].image);
+              if (publicId) {
+                await deleteFromCloudinary("ingredients", publicId.split('/')[1]);
+              }
+            }
+            
+            // Upload new ingredient image
+            const filePath = ingredientImages[i].path;
+            imageUrl = await uploadToCloudinary(filePath, "ingredients", `ingredient-${Date.now()}-${i}`);
+            fs.unlinkSync(filePath);
+          }
+          
+          return { name, image: imageUrl };
+        })
+      );
 
+      recipe.ingredients = updatedIngredients;
       recipe.steps = Array.isArray(steps) ? steps : [steps];
 
       recipe.nutrition.calories = getFirstValue(calories);
@@ -210,8 +254,7 @@ app.post(
   }
 );
 
-
-//new route
+//route to add a new plant (already has Cloudinary integration)
 app.post(
   "/create",
   upload.fields([
@@ -242,7 +285,15 @@ app.post(
         vitaminC
       } = req.body;
 
-      // Save plant
+      // ✅ Upload plant image
+      let plantImageUrl = "";
+      if (req.files["plantImage"]) {
+        const filePath = req.files["plantImage"][0].path;
+        plantImageUrl = await uploadToCloudinary(filePath, "plants", "plant-" + Date.now());
+        fs.unlinkSync(filePath);
+      }
+
+      // ✅ Save plant
       const plant = new Plant({
         name: plantName,
         scientificName,
@@ -250,25 +301,41 @@ app.post(
         medicinalValue,
         chemicalComposition,
         traditionalUses,
-        image: req.files["plantImage"] ? "/uploads/" + req.files["plantImage"][0].filename : ""
+        image: plantImageUrl
       });
       await plant.save();
 
-      // Ingredients
+      // ✅ Upload recipe (dish) image
+      let dishImageUrl = "";
+      if (req.files["dishImage"]) {
+        const filePath = req.files["dishImage"][0].path;
+        dishImageUrl = await uploadToCloudinary(filePath, "recipes", "dish-" + Date.now());
+        fs.unlinkSync(filePath);
+      }
+
+      // ✅ Upload ingredients images
       const names = Array.isArray(ingredientsNames) ? ingredientsNames : [ingredientsNames];
       const images = req.files["ingredientsImages"] || [];
-      const ingredients = names.map((name, i) => ({
-        name,
-        image: images[i] ? "/uploads/" + images[i].filename : ""
-      }));
 
-      // Steps
+      const ingredients = await Promise.all(
+        names.map(async (name, i) => {
+          let imageUrl = "";
+          if (images[i]) {
+            const filePath = images[i].path;
+            imageUrl = await uploadToCloudinary(filePath, "ingredients", `ingredient-${Date.now()}-${i}`);
+            fs.unlinkSync(filePath);
+          }
+          return { name, image: imageUrl };
+        })
+      );
+
+      // ✅ Recipe steps
       const recipeSteps = Array.isArray(steps) ? steps : [steps];
 
-      // Save recipe
+      // ✅ Save recipe
       const recipe = new Recipe({
         title,
-        image: req.files["dishImage"] ? "/uploads/" + req.files["dishImage"][0].filename : "",
+        image: dishImageUrl,
         plant: plant._id,
         ingredients,
         steps: recipeSteps,
@@ -294,9 +361,7 @@ app.post(
   }
 );
 
-
-
-
+//route to update a plant (PUT route)
 app.put("/plants/:id", upload.fields([
   { name: "plantImage", maxCount: 1 },
   { name: "dishImage", maxCount: 1 },
@@ -340,19 +405,51 @@ app.put("/plants/:id", upload.fields([
     plant.chemicalComposition = chemicalComposition;
     plant.traditionalUses = traditionalUses;
 
+    // Handle plant image update
     if (req.files["plantImage"]) {
-      plant.image = "/uploads/" + req.files["plantImage"][0].filename;
+      // Delete old image from Cloudinary if it exists
+      if (plant.image) {
+        const publicId = getPublicIdFromUrl(plant.image);
+        if (publicId) {
+          await deleteFromCloudinary("plants", publicId.split('/')[1]);
+        }
+      }
+      
+      // Upload new image
+      const filePath = req.files["plantImage"][0].path;
+      const plantImageUrl = await uploadToCloudinary(filePath, "plants", "plant-" + Date.now());
+      plant.image = plantImageUrl;
+      fs.unlinkSync(filePath);
     }
 
     await plant.save();
 
-    // Handle ingredients
+    // Handle ingredients with image updates
     const ingredientNames = Array.isArray(ingredientsNames) ? ingredientsNames : [ingredientsNames];
     const ingredientImages = req.files["ingredientsImages"] || [];
-    const ingredients = ingredientNames.map((name, i) => ({
-      name,
-      image: ingredientImages[i] ? "/uploads/" + ingredientImages[i].filename : (recipe.ingredients[i]?.image || "")
-    }));
+    
+    const ingredients = await Promise.all(
+      ingredientNames.map(async (name, i) => {
+        let imageUrl = recipe.ingredients[i]?.image || "";
+        
+        if (ingredientImages[i]) {
+          // Delete old ingredient image if it exists
+          if (recipe.ingredients[i]?.image) {
+            const publicId = getPublicIdFromUrl(recipe.ingredients[i].image);
+            if (publicId) {
+              await deleteFromCloudinary("ingredients", publicId.split('/')[1]);
+            }
+          }
+          
+          // Upload new ingredient image
+          const filePath = ingredientImages[i].path;
+          imageUrl = await uploadToCloudinary(filePath, "ingredients", `ingredient-${Date.now()}-${i}`);
+          fs.unlinkSync(filePath);
+        }
+        
+        return { name, image: imageUrl };
+      })
+    );
 
     // Update recipe fields
     recipe.title = title;
@@ -370,8 +467,21 @@ app.put("/plants/:id", upload.fields([
       vitaminC
     };
 
+    // Handle dish image update
     if (req.files["dishImage"]) {
-      recipe.image = "/uploads/" + req.files["dishImage"][0].filename;
+      // Delete old image from Cloudinary if it exists
+      if (recipe.image) {
+        const publicId = getPublicIdFromUrl(recipe.image);
+        if (publicId) {
+          await deleteFromCloudinary("recipes", publicId.split('/')[1]);
+        }
+      }
+      
+      // Upload new image
+      const filePath = req.files["dishImage"][0].path;
+      const dishImageUrl = await uploadToCloudinary(filePath, "recipes", "dish-" + Date.now());
+      recipe.image = dishImageUrl;
+      fs.unlinkSync(filePath);
     }
 
     await recipe.save();
@@ -383,15 +493,48 @@ app.put("/plants/:id", upload.fields([
   }
 });
 
-
+//route to delete a plant
 app.post("/plants/:id/delete", async (req, res) => {
   try {
     const plantId = req.params.id;
 
-    // First delete the recipe
-    await Recipe.deleteOne({ plant: plantId });
+    // Find the plant and recipe to get image URLs
+    const plant = await Plant.findById(plantId);
+    const recipe = await Recipe.findOne({ plant: plantId });
 
-    // Then delete the plant
+    if (plant) {
+      // Delete plant image from Cloudinary
+      if (plant.image) {
+        const publicId = getPublicIdFromUrl(plant.image);
+        if (publicId) {
+          await deleteFromCloudinary("plants", publicId.split('/')[1]);
+        }
+      }
+
+      // Delete recipe and ingredient images from Cloudinary
+      if (recipe) {
+        // Delete recipe image
+        if (recipe.image) {
+          const publicId = getPublicIdFromUrl(recipe.image);
+          if (publicId) {
+            await deleteFromCloudinary("recipes", publicId.split('/')[1]);
+          }
+        }
+
+        // Delete ingredient images
+        for (const ingredient of recipe.ingredients) {
+          if (ingredient.image) {
+            const publicId = getPublicIdFromUrl(ingredient.image);
+            if (publicId) {
+              await deleteFromCloudinary("ingredients", publicId.split('/')[1]);
+            }
+          }
+        }
+      }
+    }
+
+    // Delete from database
+    await Recipe.deleteOne({ plant: plantId });
     await Plant.findByIdAndDelete(plantId);
 
     res.redirect("/plants");
@@ -401,14 +544,7 @@ app.post("/plants/:id/delete", async (req, res) => {
   }
 });
 
-
-
-
-
 //---------------------------------------------for fruits--------------------------------------------
-
-
-
 
 // List fruits
 app.get("/fruits", async (req, res) => {
@@ -423,13 +559,12 @@ app.get("/fruit-recipes/:id", async (req, res) => {
   res.render("fruitRecipe", { recipe });
 });
 
-//add fruit
 // Show form to add new fruit
 app.get("/fruits/new", (req, res) => {
   res.render("newFruit"); 
 });
 
-
+// Add new fruit with Cloudinary integration
 app.post(
   "/fruits/new",
   upload.fields([
@@ -460,6 +595,14 @@ app.post(
         vitaminC
       } = req.body;
 
+      // Upload fruit image
+      let fruitImageUrl = "";
+      if (req.files["plantImage"]) {
+        const filePath = req.files["plantImage"][0].path;
+        fruitImageUrl = await uploadToCloudinary(filePath, "fruits", "fruit-" + Date.now());
+        fs.unlinkSync(filePath);
+      }
+
       // Save fruit
       const fruit = new Fruit({
         name: plantName,
@@ -468,22 +611,33 @@ app.post(
         medicinalValue,
         chemicalComposition,
         traditionalUses,
-        image: req.files["plantImage"]
-          ? "/uploads/" + req.files["plantImage"][0].filename
-          : ""
+        image: fruitImageUrl
       });
       await fruit.save();
 
-      // Handle ingredients
-      const names = Array.isArray(ingredientsNames)
-        ? ingredientsNames
-        : [ingredientsNames];
+      // Upload recipe (dish) image
+      let dishImageUrl = "";
+      if (req.files["dishImage"]) {
+        const filePath = req.files["dishImage"][0].path;
+        dishImageUrl = await uploadToCloudinary(filePath, "fruit-recipes", "fruit-dish-" + Date.now());
+        fs.unlinkSync(filePath);
+      }
+
+      // Handle ingredients with image uploads
+      const names = Array.isArray(ingredientsNames) ? ingredientsNames : [ingredientsNames];
       const images = req.files["ingredientsImages"] || [];
 
-      const ingredients = names.map((name, i) => ({
-        name,
-        image: images[i] ? "/uploads/" + images[i].filename : ""
-      }));
+      const ingredients = await Promise.all(
+        names.map(async (name, i) => {
+          let imageUrl = "";
+          if (images[i]) {
+            const filePath = images[i].path;
+            imageUrl = await uploadToCloudinary(filePath, "fruit-ingredients", `fruit-ingredient-${Date.now()}-${i}`);
+            fs.unlinkSync(filePath);
+          }
+          return { name, image: imageUrl };
+        })
+      );
 
       // Steps
       const recipeSteps = Array.isArray(steps) ? steps : [steps];
@@ -491,9 +645,7 @@ app.post(
       // Save recipe
       const recipe = new RecipeFruit({
         title,
-        image: req.files["dishImage"]
-          ? "/uploads/" + req.files["dishImage"][0].filename
-          : "",
+        image: dishImageUrl,
         fruit: fruit._id,
         ingredients,
         steps: recipeSteps,
@@ -519,9 +671,6 @@ app.post(
   }
 );
 
-
-
-
 // Edit form
 app.get("/fruits/:id/edit", async (req, res) => {
   const recipe = await RecipeFruit.findOne({ fruit: req.params.id }).populate("fruit");
@@ -529,7 +678,7 @@ app.get("/fruits/:id/edit", async (req, res) => {
   res.render("editFruit", { recipe });
 });
 
-// Update
+// Update fruit with Cloudinary integration
 app.put("/fruits/:id",
   upload.fields([
     { name: "plantImage", maxCount: 1 },
@@ -557,25 +706,73 @@ app.put("/fruits/:id",
       recipe.fruit.chemicalComposition = chemicalComposition;
       recipe.fruit.traditionalUses = traditionalUses;
 
+      // Handle fruit image update
       if (req.files["plantImage"]) {
-        recipe.fruit.image = "/uploads/" + req.files["plantImage"][0].filename;
+        // Delete old image from Cloudinary if it exists
+        if (recipe.fruit.image) {
+          const publicId = getPublicIdFromUrl(recipe.fruit.image);
+          if (publicId) {
+            await deleteFromCloudinary("fruits", publicId.split('/')[1]);
+          }
+        }
+        
+        // Upload new image
+        const filePath = req.files["plantImage"][0].path;
+        const fruitImageUrl = await uploadToCloudinary(filePath, "fruits", "fruit-" + Date.now());
+        recipe.fruit.image = fruitImageUrl;
+        fs.unlinkSync(filePath);
       }
 
       await recipe.fruit.save();
 
       // Update recipe
       recipe.title = title;
+
+      // Handle dish image update
       if (req.files["dishImage"]) {
-        recipe.image = "/uploads/" + req.files["dishImage"][0].filename;
+        // Delete old image from Cloudinary if it exists
+        if (recipe.image) {
+          const publicId = getPublicIdFromUrl(recipe.image);
+          if (publicId) {
+            await deleteFromCloudinary("fruit-recipes", publicId.split('/')[1]);
+          }
+        }
+        
+        // Upload new image
+        const filePath = req.files["dishImage"][0].path;
+        const dishImageUrl = await uploadToCloudinary(filePath, "fruit-recipes", "fruit-dish-" + Date.now());
+        recipe.image = dishImageUrl;
+        fs.unlinkSync(filePath);
       }
 
+      // Handle ingredients with image updates
       const names = Array.isArray(ingredientsNames) ? ingredientsNames : [ingredientsNames];
       const images = req.files["ingredientsImages"] || [];
-      recipe.ingredients = names.map((name, i) => ({
-        name,
-        image: images[i] ? "/uploads/" + images[i].filename : recipe.ingredients[i]?.image || ""
-      }));
+      
+      const updatedIngredients = await Promise.all(
+        names.map(async (name, i) => {
+          let imageUrl = recipe.ingredients[i]?.image || "";
+          
+          if (images[i]) {
+            // Delete old ingredient image if it exists
+            if (recipe.ingredients[i]?.image) {
+              const publicId = getPublicIdFromUrl(recipe.ingredients[i].image);
+              if (publicId) {
+                await deleteFromCloudinary("fruit-ingredients", publicId.split('/')[1]);
+              }
+            }
+            
+            // Upload new ingredient image
+            const filePath = images[i].path;
+            imageUrl = await uploadToCloudinary(filePath, "fruit-ingredients", `fruit-ingredient-${Date.now()}-${i}`);
+            fs.unlinkSync(filePath);
+          }
+          
+          return { name, image: imageUrl };
+        })
+      );
 
+      recipe.ingredients = updatedIngredients;
       recipe.steps = Array.isArray(steps) ? steps : [steps];
       recipe.nutrition = {
         calories: getFirstValue(calories),
@@ -593,21 +790,62 @@ app.put("/fruits/:id",
       res.redirect("/fruits");
 
     } catch (err) {
-      console.error(" Update fruit error:", err);
+      console.error("❌ Update fruit error:", err);
       res.status(500).send("Error updating fruit recipe.");
     }
   }
 );
 
-
-// Delete
+// Delete fruit with Cloudinary cleanup
 app.post("/fruits/:id/delete", async (req, res) => {
-  await RecipeFruit.deleteOne({ fruit: req.params.id });
-  await Fruit.findByIdAndDelete(req.params.id);
-  res.redirect("/fruits");
+  try {
+    const fruitId = req.params.id;
+
+    // Find the fruit and recipe to get image URLs
+    const fruit = await Fruit.findById(fruitId);
+    const recipe = await RecipeFruit.findOne({ fruit: fruitId });
+
+    if (fruit) {
+      // Delete fruit image from Cloudinary
+      if (fruit.image) {
+        const publicId = getPublicIdFromUrl(fruit.image);
+        if (publicId) {
+          await deleteFromCloudinary("fruits", publicId.split('/')[1]);
+        }
+      }
+
+      // Delete recipe and ingredient images from Cloudinary
+      if (recipe) {
+        // Delete recipe image
+        if (recipe.image) {
+          const publicId = getPublicIdFromUrl(recipe.image);
+          if (publicId) {
+            await deleteFromCloudinary("fruit-recipes", publicId.split('/')[1]);
+          }
+        }
+
+        // Delete ingredient images
+        for (const ingredient of recipe.ingredients) {
+          if (ingredient.image) {
+            const publicId = getPublicIdFromUrl(ingredient.image);
+            if (publicId) {
+              await deleteFromCloudinary("fruit-ingredients", publicId.split('/')[1]);
+            }
+          }
+        }
+      }
+    }
+
+    // Delete from database
+    await RecipeFruit.deleteOne({ fruit: fruitId });
+    await Fruit.findByIdAndDelete(fruitId);
+
+    res.redirect("/fruits");
+  } catch (err) {
+    console.error("❌ Error deleting fruit:", err);
+    res.status(500).send("Error deleting fruit and recipe.");
+  }
 });
-
-
 
 //---------------footer-----------
 app.get('/about', (req, res) => {
@@ -621,8 +859,6 @@ app.get('/collaboration', (req, res) => {
 app.get('/contact', (req, res) => {
   res.render('contact'); 
 });
-
-
 
 // Start the server
 app.listen(port, () => {
