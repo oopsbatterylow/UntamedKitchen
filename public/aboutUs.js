@@ -56,13 +56,13 @@ function showMember(memberId) {
       nishita: {
       name: "Nishita Bora",
       role: "content designer",
-      image: "/images/team/bijayananda.jpg",
+      image: "/images/nixita.jpg",
       bg: "/images/bg/bijayananda-bg.jpg",
       work: "– Language and content designer; crafted engaging narratives for children.",
       about: "A pol science major student of 5th sem  studing in Jagannath Barooah University (as per as july 2025).",
       contact: {
-        phone: " grp t koi diba aru aru pto u di diba",
-        email: "koi diba"
+        phone: "8099173147",
+        email: "miss.nishita07@gmail.com"
       }
     },
       anushka: {
