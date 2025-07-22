@@ -66,7 +66,7 @@ function showMember(memberId) {
       }
     },
       anushka: {
-      name: "Anushka Singh Boraik",
+      name: "Anuska Singh Boraik",
       role: "Creative lead",
       image: "/images/anushka.jpg",
       bg: "/images/bg/bijayananda-bg.jpg",
@@ -92,13 +92,13 @@ function showMember(memberId) {
       ayushman: {
       name: "Ayushman Bharadwaj",
       role: "Recipe standardizer",
-      image: "/images/team/bijayananda.jpg",
+      image: "/images/ayushman.jpg",
       bg: "/images/bg/bijayananda-bg.jpg",
       work: "Recipe standardizer; adapted local dishes into easy, healthy formats.",
       about: "A pol science major student of 5th sem  studing in Jagannath Barooah University (as per as july 2025).",
       contact: {
-        phone: " grp t koi diba aru aru pto u di diba",
-        email: "koi diba"
+        phone: "8638904507",
+        email: " "
       }
     },
    
