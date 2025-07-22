@@ -32,13 +32,13 @@ function showMember(memberId) {
     bijayananda: {
       name: "Bijayananda Bora",
       role: "Field Research Lead",
-      image: "/images/team/bijayananda.jpg",
+      image: "/images/bijoy.jpg",
       bg: "/images/bg/bijayananda-bg.jpg",
       work: "Field research lead;focused on community interviews and local food mapping",
       about: "A pol science major student of 5th sem  studing in Jagannath Barooah University (as per as july 2025).",
       contact: {
-        phone: " grp t koi diba aru aru pto u di diba",
-        email: "koi diba"
+        phone: " 9678035934",
+        email: " bjy247@gmail.com"
       }
     },
       shruti: {
