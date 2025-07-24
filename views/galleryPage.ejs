@@ -29,14 +29,13 @@
 
           <!-- Edit/Delete Buttons -->
            <div class="card-actions">
-            Edit 
             <form action="/<%= type === 'plant' ? 'plants' : 'fruits' %>/<%= item._id %>/edit" method="GET" onsubmit="return confirmPassword();">
-              <button type="submit" class="btn-edit">Edit</button>
+              <!-- <button type="submit" class="btn-edit">Edit</button> -->
             </form>
 
             <!-- Delete -->
             <form action="/<%= type === 'plant' ? 'plants' : 'fruits' %>/<%= item._id %>/delete" method="POST" onsubmit="return confirmPassword();">
-              <button type="submit" class="btn-delete">Delete</button>
+              <!-- <button type="submit" class="btn-delete">Delete</button> -->
             </form>
           </div>
         </li>
@@ -46,7 +45,7 @@
     <!-- Add New Button -->
     <% if (type === "fruit") { %>
       <div class="redirect-button">
-        <a href="/fruits/new" class="btn-add"> Add Fruit/Veg</a>
+        <!-- <a href="/fruits/new" class="btn-add"> Add Fruit/Veg</a> -->
       </div>
     <% } else { %>
       <div class="redirect-button">

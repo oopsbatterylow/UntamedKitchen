@@ -21,16 +21,16 @@
         <li class="plant-item">
           <img src="<%= plant.image %>" alt="<%= plant.name %>" onclick="location.href='/recipes/<%= plant._id %>';">
           <span><%= plant.name %></span>
-
+          <!-- edit delete btn eyat -->
           <div class="card-actions">
             <!-- Edit Button -->
             <form method="GET" action="/plants/<%= plant._id %>/edit" onsubmit="return confirmPassword();">
-              <button type="submit" class="edit-btn">Edit</button>
+              <!-- <button type="submit" class="edit-btn">Edit</button> -->
             </form>
 
             <!-- Delete Button -->
             <form method="POST" action="/plants/<%= plant._id %>/delete" onsubmit="return confirmPassword();">
-              <button type="submit" class="delete-btn">Delete</button>
+              <!-- <button type="submit" class="delete-btn">Delete</button> -->
             </form>
           </div>
         </li>
@@ -38,7 +38,7 @@
     </ul>
 
     <div class="redirect-button">
-    <a href="/createForm" class="page-btn">Add New</a>
+    <!-- <a href="/createForm" class="page-btn">Add New</a> -->
     </div>
 
     <div class="redirect-button">
