@@ -23,7 +23,7 @@
           <span><%= plant.name %></span>
 
           <!-- <div class="card-actions">
-            <!-- Edit Button -->
+            Edit Button -->
             <form method="GET" action="/plants/<%= plant._id %>/edit" onsubmit="return confirmPassword();">
               <button type="submit" class="edit-btn">Edit</button>
             </form>
@@ -32,14 +32,14 @@
             <form method="POST" action="/plants/<%= plant._id %>/delete" onsubmit="return confirmPassword();">
               <button type="submit" class="delete-btn">Delete</button>
             </form>
-          </div> -->
+          </div>
         </li>
       <% }); %>
     </ul>
 
-    <!-- <div class="redirect-button">
+    <div class="redirect-button">
     <a href="/createForm" class="page-btn">Add New</a>
-    </div> -->
+    </div>
 
     <div class="redirect-button">
       <a href="/fruits" class="page-btn">Fruit/Veg </a>
