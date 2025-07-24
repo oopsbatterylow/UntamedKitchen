@@ -22,8 +22,8 @@
           <img src="<%= plant.image %>" alt="<%= plant.name %>" onclick="location.href='/recipes/<%= plant._id %>';">
           <span><%= plant.name %></span>
 
-          <!-- <div class="card-actions">
-            Edit Button -->
+          <div class="card-actions">
+            <!-- Edit Button -->
             <form method="GET" action="/plants/<%= plant._id %>/edit" onsubmit="return confirmPassword();">
               <button type="submit" class="edit-btn">Edit</button>
             </form>
@@ -75,7 +75,7 @@
 
 
   <script>
-    const PASSWORD = "untamed123"; // Change this if needed
+    const PASSWORD = "untamed123"; 
 
     function confirmPassword() {
       const userInput = prompt("🔒 Enter the admin password to continue:");
